@@ -32,6 +32,15 @@ const UserSchema = Schema({
     type: String,
     required: false,
   },
+  googleId: {
+    type: String,
+  },
+  googleDisplayName: {
+    type: String,
+  },
+  googleEmail: {
+    type: String,
+  },
 },
   {
     timestamps: true,

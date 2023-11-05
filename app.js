@@ -4,6 +4,8 @@ import morgan from "morgan";
 import bodyParser from "body-parser";
 import { config } from "./src/config/connect.js";
 import { globalErrorHandler } from "./src/utils/errorHandler.js";
+import passport from 'passport';
+import "./src/config/passport/google.auth.js"
 
 // The Routes
 import { router as userRouter } from "./src/router/user.route.js";
@@ -21,6 +23,20 @@ const port = config.port || 8080
 app.use(morgan("tiny"));
 app.use(express.json());
 app.use(bodyParser.json());
+
+// Passport
+app.use(passport.initialize());
+
+// GoogleAuth
+app.get('/auth/google',
+  passport.authenticate('google', { scope: ['profile'] }));
+
+app.get('/auth/google/callback', 
+  passport.authenticate('google', { failureRedirect: '/login' }),
+  function(req, res) {
+    // Successful authentication, redirect home.
+    res.redirect('/');
+  });
 
 // Routes
 app.use("/api/restaurant/user", userRouter);
